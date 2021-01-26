@@ -36,17 +36,16 @@ class PostController extends Controller
     public function actionIndex()
     {
         $searchModel = new PostSearch();
-        list($dataProvider, $sort) = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'sort' => $sort
         ]);
     }
 
     /**
      * Displays a single Post model.
-     * @param integer $id
+     * @param string $slug
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -118,7 +117,7 @@ class PostController extends Controller
      */
     protected function findModel($slug)
     {
-        if (($model = Post::findOne(compact($slug))) !== null) {
+        if (($model = Post::findOne(compact('slug'))) !== null) {
             return $model;
         }
 

@@ -38,19 +38,13 @@ class PostSearch extends Post
      *
      * @param array $params
      *
-     * @return array
+     * @return ActiveDataProvider
      */
     public function search($params)
     {
         $query = Post::find();
-        $sort = new Sort([
-            'attributes' => [
-                'created_at'
-            ]
-        ]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => $sort
         ]);
 
         $this->load($params);
@@ -58,7 +52,7 @@ class PostSearch extends Post
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
-            return [$dataProvider, $sort];
+            return $dataProvider;
         }
 
         // grid filtering conditions
@@ -73,6 +67,6 @@ class PostSearch extends Post
             ->andFilterWhere(['like', 'slug', $this->slug])
             ->andFilterWhere(['like', 'body', $this->body]);
 
-        return [$dataProvider, $sort];
+        return $dataProvider;
     }
 }
