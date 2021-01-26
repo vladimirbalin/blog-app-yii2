@@ -41,11 +41,11 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Create account', 'url' => ['/site/signup'], 'visible' => Yii::$app->user->isGuest],
-            ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
+            ['label' => 'Create account', 'url' => ['/auth/signup'], 'visible' => Yii::$app->user->isGuest],
+            ['label' => 'Login', 'url' => ['/auth/login'], 'visible' => Yii::$app->user->isGuest],
             !Yii::$app->user->isGuest ? (
                 '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
+                . Html::beginForm(['/auth/logout'], 'post')
                 . Html::submitButton(
                     'Logout (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link nav-link border-0']
@@ -69,7 +69,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">Simple blog app. <?= date('Y') ?></p>
+        <p class="pull-left">Simple blog app <?= date('Y') ?></p>
     </div>
 </footer>
 

@@ -23,7 +23,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return 'users';
+        return 'user';
     }
 
     public static function primaryKey()
@@ -71,7 +71,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
+     * Finds user by email
      *
      * @param $email string
      * @return static|null
@@ -113,7 +113,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validatePassword($password)
     {
-//        return $this->password === $password;
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 }

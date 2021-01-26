@@ -43,7 +43,7 @@ $this->title = 'Login';
                     <div class="col">
                         <?= Html::submitButton('Login', ['class' => 'btn btn-primary w-100', 'name' => 'login-button']) ?>
                     </div>
-                    <div class="col pt-2"><p>Don't have an account? <a href="/site/signup">Create one</a></p></div>
+                    <div class="col pt-2"><p>Don't have an account? <a href="/auth/signup">Create one</a></p></div>
                 </div>
             </div>
 
