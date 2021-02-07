@@ -36,8 +36,8 @@ class SignupForm extends Model
     {
         return [
             [['username', 'email', 'password', 'password_repeat', 'birth_day', 'birth_year', 'birth_month'], 'required'],
-//            [['birth_date'], 'date', 'min' => '01-01-2010', 'format' => 'dd-mm-yyyy', 'timestampAttribute' => 'timeSt'],
-            [['username', 'email'], 'unique', 'targetAttribute' => ['username', 'email']],
+            ['username', 'unique', 'targetClass' => User::class, 'message' => 'This username has already been taken.'],
+            ['email', 'unique', 'targetClass' => User::class, 'message' => 'This email has already been taken.'],
             ['email', 'email'],
             [['username'], 'string', 'min' => 4, 'max' => 16],
             [['password', 'password_repeat'], 'string', 'min' => 5],
@@ -47,6 +47,9 @@ class SignupForm extends Model
 
     public function signup()
     {
+        if (!$this->validate()) {
+            return null;
+        }
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
@@ -57,26 +60,25 @@ class SignupForm extends Model
         if ($birth_date) {
             $user->birth_date = strtotime($birth_date);
         }
-        if ($user->save()) {
-            return true;
-        }
-        Yii::error('User was not saved. ' . VarDumper::dumpAsString($user->errors));
-        return false;
+        return $user->save();
     }
 
     public function validateBirthDate()
     {
-        $birth_day = strlen($this->birth_day) === 1 ? '0' . $this->birth_day : $this->birth_day;
-        $birth_month = strlen($this->birth_month) === 1 ? '0' . $this->birth_month : $this->birth_month;
-        $birth_date = "$this->birth_year-$birth_month-$birth_day";
-        $origin = new DateTime($birth_date);
-        $target = new DateTime('now');
-        $interval = $origin->diff($target);
-        $age = intval($interval->format('%y'));
-        if ($age < 18) {
-            $this->addError('birth_year', 'You should be 18 and more to have an access to register on our website');
-            return false;
+        if ($this->birth_day && $this->birth_month && $this->birth_year) {
+            $birth_day = strlen($this->birth_day) === 1 ? '0' . $this->birth_day : $this->birth_day;
+            $birth_month = strlen($this->birth_month) === 1 ? '0' . $this->birth_month : $this->birth_month;
+            $birth_date = "$this->birth_year-$birth_month-$birth_day";
+            $origin = new DateTime($birth_date);
+            $target = new DateTime('now');
+            $interval = $origin->diff($target);
+            $age = intval($interval->format('%y'));
+            if ($age < 18) {
+                $this->addError('birth_year', 'You should be at least 18 to have an access to register on our website');
+                return false;
+            }
         }
-        return $birth_date;
+
+        return $birth_date ?? false;
     }
 }

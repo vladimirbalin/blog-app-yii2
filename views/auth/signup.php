@@ -17,6 +17,7 @@ $this->title = 'Sign up';
             <p>Please fill out the following fields to sign up:</p>
             <?php $form = ActiveForm::begin([
                 'id' => 'signup-form',
+                'enableAjaxValidation' => true,
                 'class' => 'mx-auto',
                 'layout' => 'horizontal',
                 'fieldConfig' => [
