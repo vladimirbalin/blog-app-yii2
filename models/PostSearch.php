@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use yii\data\Sort;
 
 /**
  * PostSearch represents the model behind the search form of `app\models\Post`.
@@ -46,7 +45,7 @@ class PostSearch extends Post
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+        $dataProvider->sort->defaultOrder = ['created_at' => 'DESC'];
         $this->load($params);
 
         if (!$this->validate()) {

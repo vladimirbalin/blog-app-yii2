@@ -10,27 +10,28 @@ use yii\widgets\ListView;
 $this->title = Yii::t('app', 'Posts');
 ?>
 <div class="post-index">
+    <? \yii\widgets\Pjax::begin()?>
 
     <h1><?= Html::encode($this->title) ?></h1>
     <div class="row">
+        <?= $this->render('_search', ['model' => $searchModel]) ?>
         <div class="col-6 mx-auto">
+
             <?= Html::a(Yii::t('app', 'New Post'), ['create'], ['class' => 'btn btn-info']) ?>
             <?= Html::a('Newer first', ['index', 'sort'=> '-created_at'], ['class' => 'btn btn-dark float-right mx-1'])?>
             <?= Html::a('Older first', ['index', 'sort'=> 'created_at'], ['class' => 'btn btn-dark float-right mx-1'])?>
         </div>
     </div>
-
-
 <div class="row">
     <div class="col-md-6 col-sm-12 mx-auto">
         <?= ListView::widget([
             'dataProvider' => $dataProvider,
-            'itemOptions' => ['class' => 'item'],
-            'itemView' => '_one_post',
+            'itemOptions' => ['class' => 'col'],
+            'itemView' => '_post',
         ]) ?>
     </div>
 
 </div>
 
-
+    <? \yii\widgets\Pjax::end()?>
 </div>

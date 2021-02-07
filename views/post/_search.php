@@ -19,11 +19,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'slug') ?>
+<!--    --><?//= $form->field($model, 'slug') ?>
 
     <?= $form->field($model, 'body') ?>
-
-    <?= $form->field($model, 'created_at') ?>
+<!---->
+<!--    --><?//= $form->field($model, 'created_at') ?>
 
     <?php // echo $form->field($model, 'updated_at') ?>
 

@@ -34,8 +34,8 @@ class AuthController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            return $this->redirect('site/index');
-
+            Yii::$app->session->setFlash('success', 'Account has been successfully created.');
+            return $this->redirect('/site');
         }
         return $this->render('signup', ['model' => $model]);
     }
