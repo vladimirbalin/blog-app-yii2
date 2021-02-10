@@ -17,7 +17,6 @@ $this->title = 'Sign up';
             <p>Please fill out the following fields to sign up:</p>
             <?php $form = ActiveForm::begin([
                 'id' => 'signup-form',
-                'enableAjaxValidation' => true,
                 'class' => 'mx-auto',
                 'layout' => 'horizontal',
                 'fieldConfig' => [
@@ -29,8 +28,8 @@ $this->title = 'Sign up';
                 ],
             ]); ?>
 
-            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-            <?= $form->field($model, 'email') ?>
+            <?= $form->field($model, 'username', ['enableAjaxValidation' => true])->textInput(['autofocus' => true]) ?>
+            <?= $form->field($model, 'email', ['enableAjaxValidation' => true]) ?>
             <?= $form->field($model, 'password')->passwordInput() ?>
             <?= $form->field($model, 'password_repeat')->passwordInput() ?>
             <?= $form->field($model, 'birth_month')->dropdownList(array_combine(range(01, 12), range(01, 12)), ['prompt' => 'Month']) ?>

@@ -53,7 +53,6 @@ class SiteController extends Controller
     }
 
 
-
     /**
      * Displays contact page.
      *
@@ -80,5 +79,25 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionRu()
+    {
+        Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                'name' => 'lan',
+                'value' => 'ru-RU'
+            ]
+        ));
+        return $this->redirect(Yii::$app->request->getReferrer());
+    }
+
+    public function actionEn()
+    {
+        Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                'name' => 'lan',
+                'value' => 'en-EN'
+            ]
+        ));
+        return $this->redirect(Yii::$app->request->getReferrer());
     }
 }

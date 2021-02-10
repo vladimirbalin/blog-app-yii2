@@ -38,11 +38,13 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav ml-auto'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => Yii::t('main', 'Home'), 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Create account', 'url' => ['/auth/signup'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Login', 'url' => ['/auth/login'], 'visible' => Yii::$app->user->isGuest],
+            ['label' => 'ru', 'url' => ['/site/ru'], ],
+            ['label' => 'en', 'url' => ['/site/en']],
             !Yii::$app->user->isGuest ? (
                 '<li>'
                 . Html::beginForm(['/auth/logout'], 'post')
