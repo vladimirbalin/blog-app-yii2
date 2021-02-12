@@ -8,18 +8,19 @@ use yii\base\Application;
 
 class LanguageSelector implements \yii\base\BootstrapInterface
 {
-    private array $supportedLanguages = ['en-US', 'ru-RU'];
+    private array $_supportedLanguages = ['en-US', 'ru-RU'];
+
     /**
      * @inheritDoc
      */
     public function bootstrap($app)
     {
-        $cookieLanguage = $app->request->cookies['lan'];
-        if(isset($cookieLanguage) && in_array($cookieLanguage, $this->supportedLanguages)){
+        $cookies = $app->request->cookies;
+        $cookieLanguage = $cookies->getValue('lan', 'en-EN');
+        if (in_array($cookieLanguage, $this->_supportedLanguages)) {
             $app->language = $cookieLanguage;
-        }else {
+        } else {
             $app->language = 'en-EN';
-
         }
     }
 }
