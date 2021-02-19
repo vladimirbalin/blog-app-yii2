@@ -24,6 +24,12 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'on beforeLogout' => function(\yii\web\UserEvent $e)
+            {
+                /** @var \app\models\User $user */
+                $user = $e->identity;
+                $user->updateAttributes(['lastvisit' => time()]);
+            }
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -41,7 +47,10 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
+
                 ],
+
             ],
         ],
         'db' => $db,

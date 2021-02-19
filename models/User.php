@@ -16,6 +16,7 @@ use yii\web\IdentityInterface;
  * @property string $auth_key
  * @property string $access_token
  * @property string $birth_date
+ * @property int $lastvisit
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -29,7 +30,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function primaryKey()
     {
-        return 'user_id';
+        return ['user_id'];
     }
 
     /**

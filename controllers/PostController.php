@@ -2,12 +2,15 @@
 
 namespace app\controllers;
 
+use app\components\TestComponent;
 use Yii;
 use app\models\Post;
 use app\models\PostSearch;
+use yii\di\ServiceLocator;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Request;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -31,6 +34,7 @@ class PostController extends Controller
 
     /**
      * Lists all Post models.
+     * @var Request $req
      * @return mixed
      */
     public function actionIndex()
@@ -51,8 +55,9 @@ class PostController extends Controller
      */
     public function actionView($slug)
     {
+        $model = $this->findModel($slug);
         return $this->render('view', [
-            'model' => $this->findModel($slug),
+            'model' => $model,
         ]);
     }
 
@@ -66,7 +71,7 @@ class PostController extends Controller
         $model = new Post();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->post_id]);
+            return $this->redirect(['view', 'slug' => $model->slug]);
         }
 
         return $this->render('create', [
@@ -77,16 +82,16 @@ class PostController extends Controller
     /**
      * Updates an existing Post model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $slug
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($slug)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($slug);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->post_id]);
+            return $this->redirect(['view', 'slug' => $model->slug]);
         }
 
         return $this->render('update', [
@@ -97,13 +102,13 @@ class PostController extends Controller
     /**
      * Deletes an existing Post model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $slug
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($slug)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($slug)->delete();
 
         return $this->redirect(['index']);
     }

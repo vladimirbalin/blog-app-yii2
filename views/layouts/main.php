@@ -49,7 +49,7 @@ AppAsset::register($this);
                 '<li>'
                 . Html::beginForm(['/auth/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Logout (' . Yii::$app->user->identity->username . "last visit: " . Yii::$app->formatter->asRelativeTime(Yii::$app->user->identity->lastvisit) . ')',
                     ['class' => 'btn btn-link nav-link border-0']
                 )
                 . Html::endForm()
