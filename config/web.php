@@ -1,5 +1,8 @@
 <?php
 
+use app\models\User;
+use yii\web\UserEvent;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -24,12 +27,13 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
-            'on beforeLogout' => function(\yii\web\UserEvent $e)
+            'on beforeLogout' => function(UserEvent $e)
             {
-                /** @var \app\models\User $user */
+                /** @var User $user */
                 $user = $e->identity;
                 $user->updateAttributes(['lastvisit' => time()]);
-            }
+            },
+            'loginUrl' => ['auth/login'],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

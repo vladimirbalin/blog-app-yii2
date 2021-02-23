@@ -23,6 +23,7 @@ class AuthController extends Controller
                 'rules' => [
                     [
                         'actions' => ['logout'],
+                        'verbs' => ['POST'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
