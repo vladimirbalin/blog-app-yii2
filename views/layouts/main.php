@@ -3,6 +3,8 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use app\controllers\PostController;
+use app\controllers\ProfileController;
 use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap4\Nav;
@@ -40,21 +42,23 @@ AppAsset::register($this);
         'items' => [
             ['label' => Yii::t('main', 'Home'), 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Posts', 'url' => ['/post'], 'active' => get_class($this->context) === PostController::class],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Create account', 'url' => ['/auth/signup'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Login', 'url' => ['/auth/login'], 'visible' => Yii::$app->user->isGuest],
-            ['label' => 'ru', 'url' => ['/site/ru'], ],
-            ['label' => 'en', 'url' => ['/site/en']],
+            ['label' => 'My Profile', 'url' => ['/profile'], 'visible' => !Yii::$app->user->isGuest, 'active' => get_class($this->context) === ProfileController::class],
             !Yii::$app->user->isGuest ? (
                 '<li>'
                 . Html::beginForm(['/auth/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . "last visit: " . Yii::$app->formatter->asRelativeTime(Yii::$app->user->identity->lastvisit) . ')',
+                    'Logout (' . Yii::$app->user->identity->username .')',
                     ['class' => 'btn btn-link nav-link border-0']
                 )
                 . Html::endForm()
                 . '</li>'
-            ) : ''
+            ) : '',
+            ['label' => 'ru', 'url' => ['/site/ru'], ],
+            ['label' => 'en', 'url' => ['/site/en']],
         ],
     ]);
     NavBar::end();

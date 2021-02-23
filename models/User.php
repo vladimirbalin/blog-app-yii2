@@ -17,9 +17,17 @@ use yii\web\IdentityInterface;
  * @property string $access_token
  * @property string $birth_date
  * @property int $lastvisit
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $address
+ * @property string $city
+ * @property string $phone
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+    const SCENARIO_EDIT_PROFILE = 'edit-profile-scenario';
+
+
     /**
      * {@inheritdoc}
      */
@@ -41,6 +49,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['username', 'email', 'password', 'auth_key', 'access_token', 'birth_date'], 'required'],
             [['username', 'email', 'password', 'auth_key', 'access_token'], 'string', 'max' => 255],
+            [['first_name', 'last_name', 'address', 'city', 'phone'], 'required', 'on' => self::SCENARIO_EDIT_PROFILE]
         ];
     }
 
@@ -77,7 +86,7 @@ class User extends ActiveRecord implements IdentityInterface
      * Finds user by email
      *
      * @param $email string
-     * @return static|null
+     * @return ActiveRecord|null
      */
     public static function findByEmail($email)
     {
@@ -117,5 +126,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password);
+    }
+
+    public function getFullName()
+    {
+        return "$this->first_name $this->last_name";
+    }
+
+    public function getFullAddress()
+    {
+        return "$this->address, $this->city";
     }
 }

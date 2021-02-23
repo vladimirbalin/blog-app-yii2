@@ -12,7 +12,7 @@ $this->title = Yii::t('app', 'Posts');
     <? \yii\widgets\Pjax::begin()?>
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <div class="row">
+    <div class="row justify-content-center">
         <?= $this->render('_search', ['model' => $searchModel]) ?>
         <div class="col-6 mx-auto">
 

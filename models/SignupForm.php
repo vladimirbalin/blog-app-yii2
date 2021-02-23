@@ -7,7 +7,6 @@ namespace app\models;
 use DateTime;
 use Yii;
 use yii\base\Model;
-use yii\helpers\VarDumper;
 
 class SignupForm extends Model
 {
@@ -18,6 +17,7 @@ class SignupForm extends Model
     public $birth_month;
     public $birth_day;
     public $birth_year;
+    public $birth_date;
 
     public function attributeLabels()
     {
@@ -56,29 +56,38 @@ class SignupForm extends Model
         $user->password = Yii::$app->security->generatePasswordHash($this->password);
         $user->access_token = Yii::$app->security->generateRandomString();
         $user->auth_key = Yii::$app->security->generateRandomString();
-        $birth_date = $this->validateBirthDate();
-        if ($birth_date) {
-            $user->birth_date = strtotime($birth_date);
+        if($this->setBirthDate($this->birth_day, $this->birth_month, $this->birth_year) && $this->validateBirthDate()){
+            $user->birth_date = strtotime($this->birth_date);
+            return $user->save();
         }
-        return $user->save();
+        return false;
+    }
+
+    public function getBirthDate()
+    {
+        return $this->birth_date;
+    }
+
+    public function setBirthDate($birth_day, $birth_month, $birth_year)
+    {
+        if ($birth_day && $birth_month && $birth_year) {
+            $birth_day = strlen($this->birth_day) === 1 ? '0' . $this->birth_day : $this->birth_day;
+            $birth_month = strlen($this->birth_month) === 1 ? '0' . $this->birth_month : $this->birth_month;
+            $this->birth_date = "$this->birth_year-$birth_month-$birth_day";
+        }
+        return false;
     }
 
     public function validateBirthDate()
     {
-        if ($this->birth_day && $this->birth_month && $this->birth_year) {
-            $birth_day = strlen($this->birth_day) === 1 ? '0' . $this->birth_day : $this->birth_day;
-            $birth_month = strlen($this->birth_month) === 1 ? '0' . $this->birth_month : $this->birth_month;
-            $birth_date = "$this->birth_year-$birth_month-$birth_day";
-            $origin = new DateTime($birth_date);
-            $target = new DateTime('now');
-            $interval = $origin->diff($target);
-            $age = intval($interval->format('%y'));
-            if ($age < 18) {
-                $this->addError('birth_year', 'You should be at least 18 to have an access to register on our website');
-                return false;
-            }
+        $origin = new DateTime($this->birth_date);
+        $target = new DateTime('now');
+        $interval = $origin->diff($target);
+        $age = intval($interval->format('%y'));
+        if ($age < 18) {
+            $this->addError('birth_year', 'You should be at least 18 to have an access to register on our website');
+            return false;
         }
-
-        return $birth_date ?? false;
+        return true;
     }
 }

@@ -16,11 +16,11 @@ class LanguageSelector implements \yii\base\BootstrapInterface
     public function bootstrap($app)
     {
         $cookies = $app->request->cookies;
-        $cookieLanguage = $cookies->getValue('lan', 'en-EN');
+        $cookieLanguage = $cookies->getValue('lan', 'en-US');
         if (in_array($cookieLanguage, $this->_supportedLanguages)) {
             $app->language = $cookieLanguage;
         } else {
-            $app->language = 'en-EN';
+            $app->language = 'en-US';
         }
     }
 }

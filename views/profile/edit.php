@@ -2,13 +2,12 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap4\ActiveForm */
-
-/* @var $model app\models\SignupForm */
+/* @var $model app\models\User */
 
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
-$this->title = 'Sign up';
+$this->title = Yii::t('app', 'Edit Profile');
 ?>
 <div class="site-signup mt-3">
     <div class="row">
@@ -16,7 +15,7 @@ $this->title = 'Sign up';
             <h1><?= Html::encode($this->title) ?></h1>
             <p>Please fill out the following fields to sign up:</p>
             <?php $form = ActiveForm::begin([
-                'id' => 'signup-form',
+                'id' => 'profile-form',
                 'class' => 'mx-auto',
                 'layout' => 'horizontal',
                 'fieldConfig' => [
@@ -28,17 +27,17 @@ $this->title = 'Sign up';
                 ],
             ]); ?>
 
-            <?= $form->field($model, 'username', ['enableAjaxValidation' => true])->textInput() ?>
-            <?= $form->field($model, 'email', ['enableAjaxValidation' => true]) ?>
-            <?= $form->field($model, 'password')->passwordInput() ?>
-            <?= $form->field($model, 'password_repeat')->passwordInput() ?>
-            <?= $form->field($model, 'birth_month')->dropdownList(array_combine(range(01, 12), range(01, 12)), ['prompt' => 'Month']) ?>
-            <?= $form->field($model, 'birth_day')->dropdownList(array_combine(range(01, 31), range(01, 31)), ['prompt' => 'Day']); ?>
-            <?= $form->field($model, 'birth_year')->dropdownList(array_combine(range(1920, date('Y')), range(1920, date('Y'))), ['prompt' => 'Year']); ?>
+            <?= $form->field($model, 'username')->textInput(['disabled' => true]) ?>
+            <?= $form->field($model, 'email')->textInput(['disabled' => true]) ?>
+            <?= $form->field($model, 'first_name')->textInput() ?>
+            <?= $form->field($model, 'last_name')->textInput() ?>
+            <?= $form->field($model, 'address' )->textInput() ?>
+            <?= $form->field($model, 'city' )->textInput() ?>
+            <?= $form->field($model, 'phone' )->textInput() ?>
 
             <div class="form-group">
                 <div class="col p-0">
-                    <?= Html::submitButton('Sign up', ['class' => 'btn btn-primary w-100 m-0', 'name' => 'signup-button']) ?>
+                    <?= Html::submitButton('Save', ['class' => 'btn btn-primary w-100 m-0', 'name' => 'profile-button']) ?>
                 </div>
             </div>
 

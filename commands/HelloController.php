@@ -7,8 +7,9 @@
 
 namespace app\commands;
 
+use app\models\User;
+use Faker\Factory;
 use yii\console\Controller;
-use yii\console\ExitCode;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -20,15 +21,22 @@ use yii\console\ExitCode;
  */
 class HelloController extends Controller
 {
-    /**
-     * This command echoes what you have entered as the message.
-     * @param string $message the message to be echoed.
-     * @return int Exit code
-     */
-    public function actionIndex($message = 'hello world')
+    public function actionIndex($email = 'brajke@mail.com')
     {
-        echo $message . "\n";
-
-        return ExitCode::OK;
+        $faker = Factory::create();
+        $first_name = $faker->firstName('male');
+        $last_name = $faker->lastName;
+        $address = $faker->address;
+        $city = $faker->city;
+        $phone = $faker->phoneNumber;
+        $user = User::findByEmail($email)->updateAttributes(
+            [
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'address' => $address,
+                'city' => $city,
+                'phone' => $phone
+            ]);
+        echo "User with email: $email, now has next values first_name = $first_name, last_name => $last_name, address = $address, city = $city, phone = $phone";
     }
 }
