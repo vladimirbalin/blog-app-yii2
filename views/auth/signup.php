@@ -5,8 +5,10 @@
 
 /* @var $model app\models\SignupForm */
 
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
+
 
 $this->title = 'Sign up';
 ?>
@@ -29,12 +31,24 @@ $this->title = 'Sign up';
             ]); ?>
 
             <?= $form->field($model, 'username', ['enableAjaxValidation' => true])->textInput() ?>
-            <?= $form->field($model, 'email', ['enableAjaxValidation' => true]) ?>
+            <?= $form->field($model, 'email', ['enableAjaxValidation' => true])->textInput() ?>
             <?= $form->field($model, 'password')->passwordInput() ?>
             <?= $form->field($model, 'password_repeat')->passwordInput() ?>
-            <?= $form->field($model, 'birth_month')->dropdownList(array_combine(range(01, 12), range(01, 12)), ['prompt' => 'Month']) ?>
-            <?= $form->field($model, 'birth_day')->dropdownList(array_combine(range(01, 31), range(01, 31)), ['prompt' => 'Day']); ?>
-            <?= $form->field($model, 'birth_year')->dropdownList(array_combine(range(1920, date('Y')), range(1920, date('Y'))), ['prompt' => 'Year']); ?>
+            <div class="form-group row field-signupform-birth-date required">
+                <?= "<label class='control-label col-lg-3 col-sm-12'>{$model->getAttributeLabel('birth_date')}</label>"; ?>
+                <div class="col-lg-9 col-sm-12">
+                    <?php echo DatePicker::widget([
+                        'model' => $model,
+                        'attribute' => 'birth_date',
+                        'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => 'mm-dd-yyyy'
+                        ]
+                    ]);
+                    echo Html::error($model, 'birth_date', ['class' => 'invalid-feedback', 'style' => 'display:block']); ?>
+                </div>
+            </div>
 
             <div class="form-group">
                 <div class="col p-0">

@@ -14,9 +14,6 @@ class SignupForm extends Model
     public $email;
     public $password;
     public $password_repeat;
-    public $birth_month;
-    public $birth_day;
-    public $birth_year;
     public $birth_date;
 
     public function attributeLabels()
@@ -26,22 +23,23 @@ class SignupForm extends Model
             'email' => 'Your email',
             'password' => 'Your password',
             'password_repeat' => 'Repeat password',
-            'birth_month' => 'Birth month',
-            'birth_day' => 'Birth Day',
-            'birth_year' => 'Birth year'
+            'birth_date' => 'Birth Date'
         ];
     }
 
     public function rules()
     {
         return [
-            [['username', 'email', 'password', 'password_repeat', 'birth_day', 'birth_year', 'birth_month'], 'required'],
+            [['username', 'email', 'password', 'password_repeat', 'birth_date'], 'required'],
             ['username', 'unique', 'targetClass' => User::class, 'message' => 'This username has already been taken.'],
             ['email', 'unique', 'targetClass' => User::class, 'message' => 'This email has already been taken.'],
             ['email', 'email'],
             [['username'], 'string', 'min' => 4, 'max' => 16],
             [['password', 'password_repeat'], 'string', 'min' => 5],
             ['password_repeat', 'compare', 'compareAttribute' => 'password'],
+
+            ['birth_date', 'date', 'format' => 'php:m-d-Y', 'max' => date('m-d-Y', strtotime('-18 years')),
+                'tooBig' => 'You should be atleast 18 years old to create an account.']
         ];
     }
 
@@ -56,38 +54,8 @@ class SignupForm extends Model
         $user->password = Yii::$app->security->generatePasswordHash($this->password);
         $user->access_token = Yii::$app->security->generateRandomString();
         $user->auth_key = Yii::$app->security->generateRandomString();
-        if($this->setBirthDate($this->birth_day, $this->birth_month, $this->birth_year) && $this->validateBirthDate()){
-            $user->birth_date = strtotime($this->birth_date);
-            return $user->save();
-        }
+        $user->birth_date = $this->birth_date;
         return false;
     }
 
-    public function getBirthDate()
-    {
-        return $this->birth_date;
-    }
-
-    public function setBirthDate($birth_day, $birth_month, $birth_year)
-    {
-        if ($birth_day && $birth_month && $birth_year) {
-            $birth_day = strlen($this->birth_day) === 1 ? '0' . $this->birth_day : $this->birth_day;
-            $birth_month = strlen($this->birth_month) === 1 ? '0' . $this->birth_month : $this->birth_month;
-            $this->birth_date = "$this->birth_year-$birth_month-$birth_day";
-        }
-        return false;
-    }
-
-    public function validateBirthDate()
-    {
-        $origin = new DateTime($this->birth_date);
-        $target = new DateTime('now');
-        $interval = $origin->diff($target);
-        $age = intval($interval->format('%y'));
-        if ($age < 18) {
-            $this->addError('birth_year', 'You should be at least 18 to have an access to register on our website');
-            return false;
-        }
-        return true;
-    }
 }
