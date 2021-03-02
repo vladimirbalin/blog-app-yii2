@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ListView;
 
@@ -13,16 +14,29 @@ $this->title = Yii::t('app', 'Posts');
 
     <h1><?= Html::encode($this->title) ?></h1>
     <div class="row justify-content-center">
-        <?= $this->render('_search', ['model' => $searchModel]) ?>
-        <div class="col-6 mx-auto">
 
+
+        <div class="col-10 mx-auto">
+            <?php \yii\widgets\ActiveForm::begin(['options' => ['class' => 'w-25 d-inline-block']]) ?>
+            <span>Sort by authors:</span>
+            <?= Html::activeDropDownList(
+                $searchModel,
+                'created_by',
+                User::getList(),
+                [
+                    'class' => 'form-control',
+                    'prompt' => 'All authors',
+                    'onchange'=>'this.form.submit()'
+                ]
+            ) ?>
+            <?php \yii\widgets\ActiveForm::end() ?>
             <?= Html::a(Yii::t('app', 'New Post'), ['create'], ['class' => 'btn btn-info']) ?>
             <?= Html::a('Newer first', ['index', 'sort'=> '-created_at'], ['class' => 'btn btn-dark float-right mx-1'])?>
             <?= Html::a('Older first', ['index', 'sort'=> 'created_at'], ['class' => 'btn btn-dark float-right mx-1'])?>
         </div>
     </div>
 <div class="row">
-    <div class="col-md-6 col-sm-12 mx-auto">
+    <div class="col-md-10 col-sm-12 mx-auto">
         <?= ListView::widget([
             'dataProvider' => $dataProvider,
             'itemOptions' => ['class' => 'col'],

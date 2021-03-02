@@ -2,8 +2,8 @@
 
 namespace app\models;
 
+use skeeks\yii2\slug\SlugBehavior;
 use yii\behaviors\BlameableBehavior;
-use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -31,9 +31,12 @@ class Post extends ActiveRecord
                 'class' => BlameableBehavior::class,
                 'updatedByAttribute' => false
             ],
-            [
-                'class' => SluggableBehavior::class,
-                'attribute' => 'title'
+            'slug' => [
+                'class' => SlugBehavior::class,
+                'slugAttribute' => 'slug',
+                'attribute' => 'title',
+                'maxLength' => 20,
+                'ensureUnique' => true,
             ]
         ];
     }

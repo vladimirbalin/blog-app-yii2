@@ -2,36 +2,18 @@
 
 namespace app\controllers;
 
-use app\components\TestComponent;
 use Yii;
+use app\controllers\base\BaseController;
 use app\models\Post;
 use app\models\PostSearch;
-use yii\di\ServiceLocator;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\Request;
 
 /**
  * PostController implements the CRUD actions for Post model.
  */
-class PostController extends Controller
+class PostController extends BaseController
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all Post models.
      * @var Request $req
@@ -40,7 +22,7 @@ class PostController extends Controller
     public function actionIndex()
     {
         $searchModel = new PostSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->post());
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

@@ -10,6 +10,7 @@ use yii\data\ActiveDataProvider;
  */
 class PostSearch extends Post
 {
+    public $username;
 
     /**
      * {@inheritdoc}
@@ -18,7 +19,7 @@ class PostSearch extends Post
     {
         return [
             [['post_id', 'created_at', 'updated_at', 'created_by'], 'integer'],
-            [['title', 'slug', 'body'], 'safe'],
+            [['title', 'slug', 'body', 'username'], 'safe'],
         ];
     }
 
@@ -41,7 +42,7 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        $query = Post::find();
+        $query = Post::find()->with('createdBy');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

@@ -7,6 +7,7 @@
 
 namespace app\commands;
 
+use app\models\Post;
 use app\models\User;
 use Faker\Factory;
 use yii\console\Controller;
@@ -21,14 +22,20 @@ use yii\console\Controller;
  */
 class HelloController extends Controller
 {
+    public $faker;
+    public function __construct($id, $module, $config = [])
+    {
+        $this->faker = Factory::create();
+        parent::__construct($id, $module, $config);
+    }
+
     public function actionIndex($email = 'brajke@mail.com')
     {
-        $faker = Factory::create();
-        $first_name = $faker->firstName('male');
-        $last_name = $faker->lastName;
-        $address = $faker->address;
-        $city = $faker->city;
-        $phone = $faker->phoneNumber;
+        $first_name = $this->faker->firstName('male');
+        $last_name = $this->faker->lastName;
+        $address = $this->faker->address;
+        $city = $this->faker->city;
+        $phone = $this->faker->phoneNumber;
         $user = User::findByEmail($email)->updateAttributes(
             [
                 'first_name' => $first_name,
@@ -38,5 +45,13 @@ class HelloController extends Controller
                 'phone' => $phone
             ]);
         echo "User with email: $email, now has next values first_name = $first_name, last_name => $last_name, address = $address, city = $city, phone = $phone";
+    }
+    public function actionAddArticle()
+    {
+        $model = new Post();
+        $model->title = $this->faker->text(50);
+        $model->body = $this->faker->text(2000);
+        $model->created_by = 28;
+        $model->save();
     }
 }

@@ -23,4 +23,15 @@ class LanguageSelector implements \yii\base\BootstrapInterface
             $app->language = 'en-US';
         }
     }
+
+    public static function isRuActive()
+    {
+        return 'ru-RU' === \Yii::$app->request->cookies->getValue('lan', 'en-US');
+    }
+
+    public static function isEnActive()
+    {
+        return 'en-US' === \Yii::$app->request->cookies->getValue('lan', 'en-US') ||
+            'en-EN' === \Yii::$app->request->cookies->getValue('lan', 'en-US');
+    }
 }

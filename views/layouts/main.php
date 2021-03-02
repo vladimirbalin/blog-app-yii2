@@ -58,8 +58,8 @@ AppAsset::register($this);
                 . Html::endForm()
                 . '</li>'
             ) : '',
-            ['label' => 'ru', 'url' => ['/site/ru'], ],
-            ['label' => 'en', 'url' => ['/site/en']],
+            ['label' => 'ru', 'url' => ['/site/ru'], 'active' => \app\components\LanguageSelector::isRuActive()],
+            ['label' => 'en', 'url' => ['/site/en'], 'active' => \app\components\LanguageSelector::isEnActive()],
         ],
     ]);
     NavBar::end();

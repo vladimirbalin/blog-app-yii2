@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -136,5 +137,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function getFullAddress()
     {
         return "$this->address, $this->city";
+    }
+
+    public static function getList()
+    {
+        return ArrayHelper::map(User::find()->asArray()->all(), 'user_id', 'username');
     }
 }
