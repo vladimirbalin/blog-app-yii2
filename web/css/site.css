@@ -8,3 +8,7 @@
     border-top: 1px solid #ddd;
     padding-top: 10px;
 }
+
+.pagination .active .page-link{
+    background-color: #138496;
+}

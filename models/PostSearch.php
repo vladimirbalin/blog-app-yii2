@@ -4,22 +4,25 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 
 /**
  * PostSearch represents the model behind the search form of `app\models\Post`.
  */
+
+/**
+ * @property int $author_id
+ */
 class PostSearch extends Post
 {
-    public $username;
-
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['post_id', 'created_at', 'updated_at', 'created_by'], 'integer'],
-            [['title', 'slug', 'body', 'username'], 'safe'],
+            [['post_id', 'created_at', 'updated_at', 'created_by', 'author_id'], 'integer'],
+            [['title', 'slug', 'body', 'author_id'], 'safe'],
         ];
     }
 
@@ -32,7 +35,10 @@ class PostSearch extends Post
         return Model::scenarios();
     }
 
-
+    public function attributes()
+    {
+        return ArrayHelper::merge(['author_id'], parent::attributes());
+    }
     /**
      * Creates data provider instance with search query applied
      *
@@ -45,9 +51,13 @@ class PostSearch extends Post
         $query = Post::find()->with('createdBy');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10
+            ]
         ]);
         $dataProvider->sort->defaultOrder = ['created_at' => 'DESC'];
         $this->load($params);
+        $this->created_by = $params['created_by'];
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -55,17 +65,10 @@ class PostSearch extends Post
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'post_id' => $this->post_id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'created_by' => $this->created_by,
-        ]);
-
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'slug', $this->slug])
-            ->andFilterWhere(['like', 'body', $this->body]);
+            ->andFilterWhere(['like', 'body', $this->body])
+            ->andFilterWhere(['like', 'created_by', $this->created_by]);
 
         return $dataProvider;
     }
